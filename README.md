@@ -25,7 +25,7 @@ cp .env.example .env
 
 ---
 
-### 3️⃣ **Installer les dépendances (si `vendor/` n'existe pas encore)**  
+### 3️⃣ **Installer les dépendances (si `vendor/` n'existe pas encore)**
 ```bash
 docker run --rm -v $(pwd):/app composer install
 ```
