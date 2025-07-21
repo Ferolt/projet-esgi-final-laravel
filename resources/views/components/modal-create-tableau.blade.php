@@ -30,9 +30,8 @@
                                id="table-name" 
                                name="name" 
                                required 
-                               class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" 
-                               placeholder="Mon nouveau projet"
-                               style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);">
+                               class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" 
+                               placeholder="Mon nouveau projet">
                     </div>
                     @error('name')
                         <p class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</p>
@@ -48,9 +47,8 @@
                         <textarea id="table-description" 
                                   name="description" 
                                   rows="3"
-                                  class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none" 
-                                  placeholder="Décrivez votre projet..."
-                                  style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);"></textarea>
+                                  class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none" 
+                                  placeholder="Décrivez votre projet..."></textarea>
                     </div>
                     @error('description')
                         <p class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</p>
