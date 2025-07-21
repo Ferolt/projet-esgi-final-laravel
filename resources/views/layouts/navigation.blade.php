@@ -30,16 +30,16 @@
 
             <div class="flex items-center space-x-4">
                 <!-- Barre de recherche moderne -->
-                <form action="" class="flex items-center">
+                <form action="" class="flex items-center space-x-2">
                     <div class="relative">
-                    <input
+                        <input
                             class="h-10 w-64 pl-10 pr-4 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 border-0 focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-700 transition-all duration-200 text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400"
                             type="text" name="search" id="search" placeholder="Rechercher...">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
                     </div>
-                    <button class="ml-2 h-10 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+                    <button class="h-10 px-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
                         <i class="fas fa-search mr-2"></i>Chercher
                     </button>
                 </form>
