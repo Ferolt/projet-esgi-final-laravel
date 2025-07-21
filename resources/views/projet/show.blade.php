@@ -31,10 +31,7 @@
         <div class="overflow-x-auto pb-4" id="kanban-board">
             <div class="flex gap-6 min-w-max pl-0">
                 @foreach($projet->listTasks as $listTask)
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 w-80 flex-shrink-0 flex flex-col group border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-200 relative {{ $listTask->color && !str_starts_with($listTask->color, '#') ? 'border-' . $listTask->color . '-400 dark:border-' . $listTask->color . '-500 bg-' . $listTask->color . '-50 dark:bg-' . $listTask->color . '-900/20' : '' }}" 
-                         data-list-id="{{ $listTask->id }}" 
-                         data-list-task-id="{{ $listTask->id }}" 
-                         data-color="{{ $listTask->color }}"
+                    <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-4 w-80 flex-shrink-0 flex flex-col group border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-200 relative text-gray-900 dark:text-white" data-list-id="{{ $listTask->id }}" data-list-task-id="{{ $listTask->id }}" data-color="{{ $listTask->color }}"
                          @if($listTask->color && str_starts_with($listTask->color, '#'))
                          style="border-color: {{ $listTask->color }}; background-color: {{ $listTask->color }}20;"
                          @endif>
@@ -72,7 +69,7 @@
                         </div>
                         <div class="flex-1 space-y-3 droppable-zone" data-colonne="{{ $listTask->id }}">
                             @foreach($listTask->tasks as $task)
-                                <div class="task-card bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-200 dark:border-gray-700 draggable-task cursor-grab hover:shadow-xl transition-all duration-200 transform hover:scale-105 group relative overflow-hidden"
+                                <div class="task-card bg-white/80 dark:bg-gray-900/80 rounded-xl p-4 shadow-lg border border-gray-200 dark:border-gray-700 draggable-task cursor-grab hover:shadow-xl transition-all duration-200 transform hover:scale-105 group relative overflow-hidden text-gray-900 dark:text-white"
                                      data-task-id="{{ $task->id }}"
                                      onclick="openTaskModal({{ $task->id }})">
 
@@ -91,7 +88,7 @@
                                     <div class="flex items-start justify-between mb-3 @if($task->priorite) mt-1 @endif">
                                         <div class="flex-1 pr-2">
                                             <h4 class="font-bold text-gray-900 dark:text-white text-sm leading-5 mb-1">
-                                                {{ $task->title }}
+                                                {{ $task->title ?? $task->titre ?? '' }}
                                             </h4>
                                             @if($task->description)
                                                 <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
