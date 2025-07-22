@@ -16,6 +16,13 @@
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <title>{{ config('app.name', 'Kanboard') }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -25,6 +32,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <link rel="stylesheet" href="/offline-styles.css">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
@@ -33,11 +42,12 @@
 <body class="font-sans antialiased bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
     <div class="min-h-screen flex flex-col">
         <!-- Header moderne avec effet de verre -->
-        <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-white/20 dark:border-gray-700/50 shadow-lg fixed top-0 left-0 right-0 z-50">
+        <header
+            class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-white/20 dark:border-gray-700/50 shadow-lg fixed top-0 left-0 right-0 z-50">
             @include('layouts.navigation')
         </header>
 
-     <main class="flex bg-gray-50 dark:bg-gray-900 flex-1 pt-16" id="app">
+        <main class="flex bg-gray-50 dark:bg-gray-900 flex-1 pt-16" id="app">
             @yield('content')
             {{ $slot ?? '' }}
 
@@ -47,9 +57,11 @@
             <!-- Modal de notification moderne -->
             <div id="notification-modal"
                 class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="notification-content">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0"
+                    id="notification-content">
                     <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
                             <i class="fas fa-bell text-white text-lg"></i>
                         </div>
                         <div>
@@ -71,7 +83,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     @stack('scripts')
 
     <script>
@@ -109,12 +121,10 @@
 
             container.appendChild(toast);
 
-            // Animation d'entrée
             setTimeout(() => {
                 toast.classList.remove('translate-x-full', 'opacity-0');
             }, 100);
 
-            // Animation de sortie
             setTimeout(() => {
                 toast.classList.add('translate-x-full', 'opacity-0');
                 setTimeout(() => {
@@ -128,7 +138,7 @@
         function closeNotification() {
             const modal = document.getElementById('notification-modal');
             const content = document.getElementById('notification-content');
-            
+
             content.classList.add('scale-95', 'opacity-0');
             setTimeout(() => {
                 modal.classList.add('hidden');
@@ -136,7 +146,6 @@
             }, 300);
         }
 
-        // Gestion du thème sombre
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -153,8 +162,7 @@
             }
         });
 
-        // Animation des modals
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const modals = document.querySelectorAll('[id$="-modal"]');
             modals.forEach(modal => {
                 if (!modal.classList.contains('hidden')) {
@@ -168,6 +176,20 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function (registration) {
+                        console.log('SW: Service Worker enregistré avec succès:', registration.scope);
+                    })
+                    .catch(function (error) {
+                        console.log('SW: Erreur lors de l\'enregistrement du Service Worker:', error);
+                    });
+            });
+        }
     </script>
 </body>
 

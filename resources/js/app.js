@@ -1,6 +1,7 @@
 import './bootstrap';
 // import './modal';
 import './listTask';
+import './offline-manager';
 
 import Alpine from 'alpinejs';
 
@@ -8,17 +9,14 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Fonction de notification moderne
 window.showNotification = function(title, message, type = 'info') {
     // Supprimer les notifications existantes
     const existingNotifications = document.querySelectorAll('.notification-toast');
     existingNotifications.forEach(notification => notification.remove());
 
-    // Créer la notification
     const notification = document.createElement('div');
     notification.className = `notification-toast fixed top-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transform transition-all duration-300 translate-x-full`;
-    
-    // Couleurs selon le type
+
     const colors = {
         success: 'border-green-500 bg-green-50 dark:bg-green-900/20',
         error: 'border-red-500 bg-red-50 dark:bg-red-900/20',
@@ -42,7 +40,7 @@ window.showNotification = function(title, message, type = 'info') {
     };
 
     notification.className += ` ${colors[type] || colors.info}`;
-    
+
     notification.innerHTML = `
         <div class="p-4">
             <div class="flex items-start">
@@ -69,15 +67,12 @@ window.showNotification = function(title, message, type = 'info') {
         </div>
     `;
 
-    // Ajouter au DOM
     document.body.appendChild(notification);
 
-    // Animation d'entrée
     setTimeout(() => {
         notification.classList.remove('translate-x-full');
     }, 100);
 
-    // Auto-suppression après 5 secondes
     setTimeout(() => {
         if (notification.parentElement) {
             notification.classList.add('translate-x-full');
@@ -90,34 +85,27 @@ window.showNotification = function(title, message, type = 'info') {
     }, 5000);
 };
 
-// Fonctions pour la gestion des listes dans la page projet/{nomprojet}
 
-// Initialisation des menus d'options des colonnes
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestion des menus d'options des colonnes
     document.addEventListener('click', function(e) {
         if (e.target.closest('.column-menu-btn')) {
             e.preventDefault();
             const btn = e.target.closest('.column-menu-btn');
             const columnId = btn.getAttribute('data-column-id');
             const menu = btn.nextElementSibling;
-            
-            // Fermer tous les autres menus
+
             document.querySelectorAll('.column-menu').forEach(m => {
                 if (m !== menu) m.classList.add('hidden');
             });
-            
-            // Toggle du menu actuel
+
             menu.classList.toggle('hidden');
         } else if (!e.target.closest('.column-menu')) {
-            // Fermer tous les menus si on clique ailleurs
             document.querySelectorAll('.column-menu').forEach(menu => {
                 menu.classList.add('hidden');
             });
         }
     });
 
-    // Gestion du changement de couleur
     document.addEventListener('click', function(e) {
         if (e.target.closest('.color-btn')) {
             e.preventDefault();
@@ -128,9 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Modal de sélection de couleur
 function openColorModal(columnId) {
-    // Supprimer l'ancien modal s'il existe
     const existingModal = document.getElementById('color-modal');
     if (existingModal) existingModal.remove();
 
@@ -161,7 +147,7 @@ function openColorModal(columnId) {
                 </div>
                 <div class="grid grid-cols-5 gap-3">
                     ${colors.map(color => `
-                        <button onclick="changeListColor('${columnId}', '${color.value}')" 
+                        <button onclick="changeListColor('${columnId}', '${color.value}')"
                                 class="w-12 h-12 ${color.class} rounded-lg hover:scale-110 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 title="${color.name}">
                         </button>
@@ -173,14 +159,12 @@ function openColorModal(columnId) {
 
     document.body.appendChild(modal);
 
-    // Animation d'entrée
     setTimeout(() => {
         const content = document.getElementById('color-modal-content');
         content.classList.remove('scale-95', 'opacity-0');
     }, 100);
 }
 
-// Fermer le modal de couleur
 window.closeColorModal = function() {
     const modal = document.getElementById('color-modal');
     if (modal) {
@@ -190,7 +174,6 @@ window.closeColorModal = function() {
     }
 };
 
-// Changer la couleur d'une liste
 window.changeListColor = function(columnId, color) {
     fetch('/listTask/change-color', {
         method: 'POST',
@@ -206,22 +189,18 @@ window.changeListColor = function(columnId, color) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Appliquer la couleur à la liste
             const listElement = document.querySelector(`[data-list-id="${columnId}"]`);
             if (listElement) {
-                // Supprimer les anciennes classes de couleur
-                const colorClasses = ['bg-blue-500', 'bg-green-500', 'bg-red-500', 'bg-yellow-500', 
-                                     'bg-purple-500', 'bg-pink-500', 'bg-orange-500', 'bg-indigo-500', 
+                const colorClasses = ['bg-blue-500', 'bg-green-500', 'bg-red-500', 'bg-yellow-500',
+                                     'bg-purple-500', 'bg-pink-500', 'bg-orange-500', 'bg-indigo-500',
                                      'bg-teal-500', 'bg-gray-500'];
                 colorClasses.forEach(cls => listElement.classList.remove(cls));
-                
-                // Ajouter la nouvelle couleur
+
                 listElement.classList.add(`bg-${color}-500`);
-                
-                // Mettre à jour l'attribut data-color
+
                 listElement.setAttribute('data-color', color);
             }
-            
+
             closeColorModal();
             showNotification('Succès', 'Couleur de la liste mise à jour', 'success');
         } else {
@@ -234,22 +213,19 @@ window.changeListColor = function(columnId, color) {
     });
 };
 
-// Éditer le nom d'une colonne
 window.editColumnName = function(columnId) {
     const listElement = document.querySelector(`[data-list-id="${columnId}"]`);
     const input = listElement.querySelector('input[readonly]');
     const currentValue = input.value;
-    
-    // Rendre l'input éditable
+
     input.removeAttribute('readonly');
     input.focus();
     input.select();
-    
-    // Gérer la sauvegarde
+
     input.addEventListener('blur', function() {
         saveColumnName(columnId, input.value);
     });
-    
+
     input.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             saveColumnName(columnId, input.value);
@@ -257,7 +233,6 @@ window.editColumnName = function(columnId) {
     });
 };
 
-// Sauvegarder le nom d'une colonne
 function saveColumnName(columnId, newName) {
     fetch('/listTask/update-title', {
         method: 'POST',
@@ -286,7 +261,6 @@ function saveColumnName(columnId, newName) {
     });
 }
 
-// Fonction d'affichage d'une erreur (issue de modal.js)
 window.showErrorModal = function(message) {
     let modal = document.getElementById('custom-error-modal');
     if (!modal) {
