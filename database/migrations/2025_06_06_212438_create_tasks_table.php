@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('order')->default(1);
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->foreignId('list_task_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->enum('category', ['marketing', 'développement', 'communication'])->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
             
             // Index pour améliorer les performances
+            $table->index(['project_id']);
             $table->index(['list_task_id', 'order']);
             $table->index('user_id');
             $table->index('category');
