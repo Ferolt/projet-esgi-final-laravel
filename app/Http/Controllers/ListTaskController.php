@@ -28,7 +28,7 @@ class ListTaskController extends Controller
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-2">
                     <span class="list-handle cursor-grab text-gray-400 hover:text-blue-500"><i class="fas fa-grip-vertical"></i></span>
-                    <input class="font-bold text-lg bg-transparent border-none w-3/4" value="' . $listTask->title . '" readonly="">
+                    <input class="font-bold text-lg bg-transparent border-none w-3/4 text-white" value="' . $listTask->title . '" readonly="">
                 </div>
                 <div class="flex items-center space-x-1">
                     <!-- Bouton ajouter tâche rapide -->
